@@ -1,2 +1,2 @@
-Windows: setup.bat
-Mac/Linux: setup.sh
+- Windows: setup.bat
+- Mac/Linux: setup.sh
