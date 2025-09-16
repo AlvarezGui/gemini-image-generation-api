@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+from state import salvar_prompt, ler_prompt
+
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -15,12 +17,14 @@ def verify_password(username, password):
         return username
     return None
 
-@app.route('/receber_dados', methods=['POST'])
+@app.route('/receber_prompt', methods=['POST'])
 @auth.login_required
-def receber_dados():
+def receber_prompt():
     dados = request.json
-    print(f"Dados recebidos do usuário {auth.current_user()}: {dados}")
-    return jsonify({"status": "ok", "mensagem": f"Dados recebidos com sucesso pelo usuário {auth.current_user()}"})
+    # prompt_recebido = dados["prompt"]
+    salvar_prompt(dados["prompt"])
+    print(f"Prompt recebido do usuário {auth.current_user()}: {ler_prompt}")
+    return jsonify({"status": "ok", "mensagem": f"Prompt recebido com sucesso pelo usuário {auth.current_user()}"})
 
 # rota de teste
 @app.route('/testar_rota', methods=['POST'])
