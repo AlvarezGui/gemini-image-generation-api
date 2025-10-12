@@ -4,3 +4,4 @@ python-dotenv
 requests
 Flask
 Flask-HTTPAuth
+pymongo
