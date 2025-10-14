@@ -24,8 +24,6 @@ def find_image(desc):
 # esta devolvendo apenas a descrição e o id
 # por mais que isso seja o sufuciente, gostaria de receber o base64 na mesma chamada
 
-# print(find_image("Imagem de teste"))
-
 def insert_prompt(user, desc):
     prompt = {"user": user, "desc": desc}
     prompts.insert_one(prompt)
@@ -35,10 +33,6 @@ def find_prompt(user):
     if result: return result["desc"]
     return None
     
-# insert_prompt("teste2", "Games2")
-# print(find_prompt("teste"))
-
-
 # testar
 try:
     client.admin.command('ping')
