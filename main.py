@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from state import salvar_prompt, ler_prompt
+from generate_image import generate_image
 
 
 app = Flask(__name__)
@@ -21,10 +22,10 @@ def verify_password(username, password):
 @auth.login_required
 def receber_prompt():
     dados = request.json
-    # prompt_recebido = dados["prompt"]
-    salvar_prompt(dados["prompt"])
-    print(f"Prompt recebido do usuário {auth.current_user()}: {ler_prompt}")
+    salvar_prompt(auth.current_user(), dados["desc"])
+    generate_image(dados['desc'])
     return jsonify({"status": "ok", "mensagem": f"Prompt recebido com sucesso pelo usuário {auth.current_user()}"})
+
 
 # rota de teste
 @app.route('/testar_rota', methods=['POST'])

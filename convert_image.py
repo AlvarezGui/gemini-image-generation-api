@@ -6,4 +6,5 @@ def convert_to_base64(image):
         # print(base64_bytes)
 
         base64_string = base64_bytes.decode()
+        return base64_string
         # print(base64_string)

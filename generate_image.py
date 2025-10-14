@@ -12,13 +12,13 @@ from connection import insert_image
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-user = "teste2"
+# user = "admin"
 
-prompt = (
-    ler_prompt(user)
-)
+# prompt = (
+#     ler_prompt(user)
+# )
 
-print(prompt)
+# print(prompt)
 
 # response = client.models.generate_content(
 #     model="gemini-2.5-flash-image-preview",
@@ -32,6 +32,6 @@ print(prompt)
         # image = Image.open(BytesIO(part.inline_data.data))
         # image.save("generated_image.png")
         
-
-image = "./imagem_teste.jpeg"
-insert_image(prompt, convert_to_base64(image))
+def generate_image(prompt):
+    image = "./imagem_teste.jpeg"
+    insert_image(prompt, convert_to_base64(image))
