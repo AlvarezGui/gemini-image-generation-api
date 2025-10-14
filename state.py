@@ -1,17 +1,10 @@
-import json
-import os
+from connection import insert_prompt,find_prompt
 
 FILE_PATH = "prompt.json"
 
-def salvar_prompt(valor):
-    with open(FILE_PATH, "w") as f:
-        json.dump({"prompt": valor}, f)
+def salvar_prompt(user, valor):
+    insert_prompt(user, valor)
 
-def ler_prompt():
-    if not os.path.exists(FILE_PATH):
-        return None
-    with open(FILE_PATH, "r") as f:
-        data = json.load(f)
-        return data.get("prompt")
+def ler_prompt(user):
+    return find_prompt(user)
     
-# usar o json é uma solução temporária pois claramente pode dar conflito no futuro.

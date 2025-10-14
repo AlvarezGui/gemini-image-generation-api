@@ -6,6 +6,7 @@ from UserService.user_repository import (
     User, create_user, get_user_by_email, get_all_users, update_user, delete_user
 )
 from AuthService.AuthController import auth_bp
+from generate_image import generate_image
 
 
 app = Flask(__name__)
@@ -28,10 +29,10 @@ def verify_password(username, password):
 @app.route('/receber_prompt', methods=['POST'])
 def receber_prompt():
     dados = request.json
-    # prompt_recebido = dados["prompt"]
-    salvar_prompt(dados["prompt"])
-    print(f"Prompt recebido do usuário {auth.current_user()}: {ler_prompt}")
+    salvar_prompt(auth.current_user(), dados["desc"])
+    generate_image(dados['desc'])
     return jsonify({"status": "ok", "mensagem": f"Prompt recebido com sucesso pelo usuário {auth.current_user()}"})
+
 
 # rota de teste
 @app.route('/testar_rota', methods=['POST'])
