@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-from state import salvar_prompt, ler_prompt
+from functions.state import salvar_prompt, ler_prompt
 from UserService.user_repository import (
     User, create_user, get_user_by_email, get_all_users, update_user, delete_user
 )
 from AuthService.AuthController import auth_bp
-from generate_image import generate_image
+from functions.generate_image import generate_image
 
 
 app = Flask(__name__)

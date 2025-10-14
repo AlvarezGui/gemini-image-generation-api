@@ -1,4 +1,4 @@
-from connection import insert_prompt,find_prompt
+from database.connection import insert_prompt,find_prompt
 
 FILE_PATH = "prompt.json"
 
