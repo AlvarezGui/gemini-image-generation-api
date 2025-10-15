@@ -34,13 +34,6 @@ def receber_prompt():
     return jsonify({"status": "ok", "mensagem": f"Prompt recebido com sucesso pelo usuário {auth.current_user()}"})
 
 
-# rota de teste
-@app.route('/testar_rota', methods=['POST'])
-def testar_rota():
-    dados = request.json
-    print("Foi Caralho")
-    return jsonify({"status": "ok", "mensagem": f"Dados recebidos com sucesso pelo usuário {auth.current_user()}"})
-
 # CRUD de usuário
 @app.route('/usuarios', methods=['POST'])
 def api_create_user():
