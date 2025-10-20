@@ -1,7 +1,9 @@
-
 import unittest
 import sys
 import os
+import json
+import uuid
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from main import app
 
@@ -11,26 +13,30 @@ class UserAuthTestCase(unittest.TestCase):
         self.app.testing = True
 
     def test_signup(self):
+        email = f"{uuid.uuid4()}@teste.com"
         response = self.app.post('/signup', json={
             'nome': 'Teste',
-            'email': 'teste@teste.com',
+            'email': email,
             'senha': '123456'
         })
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Usuário criado com sucesso', response.get_data(as_text=True))
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['mensagem'], 'Usuário criado com sucesso')
 
     def test_login(self):
+        email = f"{uuid.uuid4()}@teste.com"
         self.app.post('/signup', json={
             'nome': 'Login',
-            'email': 'login@teste.com',
+            'email': email,
             'senha': '123456'
         })
         response = self.app.post('/login', json={
-            'email': 'login@teste.com',
+            'email': email,
             'senha': '123456'
         })
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Login realizado com sucesso', response.get_data(as_text=True))
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['mensagem'], 'Login realizado com sucesso')
 
     def test_login_fail(self):
         response = self.app.post('/login', json={
@@ -38,7 +44,8 @@ class UserAuthTestCase(unittest.TestCase):
             'senha': 'errada'
         })
         self.assertEqual(response.status_code, 401)
-        self.assertIn('Credenciais inválidas', response.get_data(as_text=True))
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['erro'], 'Credenciais inválidas')
 
 if __name__ == '__main__':
     unittest.main()
