@@ -4,9 +4,7 @@ from PIL import Image
 from io import BytesIO
 import os
 from dotenv import load_dotenv
-from functions.state import ler_prompt
 from functions.convert_image import convert_to_base64
-from database.connection import insert_image
 
 
 load_dotenv()
@@ -34,4 +32,4 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
         
 def generate_image(prompt):
     image = "./imagem_teste.jpeg"
-    insert_image(prompt, convert_to_base64(image))
+    return convert_to_base64(image)

@@ -1,6 +1,7 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from pymongo import MongoClient, DESCENDING
 import os
 from dotenv import load_dotenv
 
@@ -8,30 +9,18 @@ load_dotenv()
 
 uri = os.getenv("MONGO_URI")
 client = MongoClient(uri, server_api=ServerApi('1'))
-db = client["Cluster0"]
+db = client["Cluster0"] # trocar para o cluster final quando acabada a fase de testes
+chats = db["chats"]
 images = db["images"]
 prompts = db["prompts"]
 
-def insert_image(desc, base):
-    image = {"desc": desc, "base": base}
-    images.insert_one(image)
+def insert_chat(subject, user_id, image, prompt):
+    chat = {"subject": subject, "user_id": user_id, "image": image, "prompt": prompt}
+    chats.insert_one(chat)
 
-def find_image(desc):
-    corresponding_images = []
-    for i in images.find({}, {"desc": desc}):
-        corresponding_images.append(i)
-    return corresponding_images
-# esta devolvendo apenas a descrição e o id
-# por mais que isso seja o sufuciente, gostaria de receber o base64 na mesma chamada
+def get_home(user_id):
+    return chats.find({"user_id": user_id}).sort("_id", DESCENDING).limit(10)
 
-def insert_prompt(user, desc):
-    prompt = {"user": user, "desc": desc}
-    prompts.insert_one(prompt)
-
-def find_prompt(user):
-    result = prompts.find_one({"user": user}, {"_id": 0, "desc": 1})
-    if result: return result["desc"]
-    return None
     
 # testar
 try:

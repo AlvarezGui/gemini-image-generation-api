@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-from functions.state import salvar_prompt, ler_prompt
+from database.connection import *
 from UserService.user_repository import (
     User, create_user, get_user_by_email, get_all_users, update_user, delete_user
 )
@@ -26,13 +26,21 @@ def verify_password(username, password):
         return username
     return None
 
-@app.route('/receber_prompt', methods=['POST'])
-def receber_prompt():
-    dados = request.json
-    salvar_prompt(auth.current_user(), dados["desc"])
-    generate_image(dados['desc'])
-    return jsonify({"status": "ok", "mensagem": f"Prompt recebido com sucesso pelo usuário {auth.current_user()}"})
+@app.route('/chat', methods=['POST'])
+def process_chat():
+    data = request.json
+    image = generate_image(data['prompt'])
+    insert_chat(data['subject'], data['user_id'], image, data['prompt'])
+    return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!"})
 
+@app.route('/home', methods=['POST'])
+def home():
+    data= request.json
+    home_cursor = get_home(data['user_id'])
+    home_list = list(home_cursor)
+    for item in home_list:
+        print(item)
+    return jsonify({"status": "ok", "mensagem": f"{home_list}"})
 
 # CRUD de usuário
 @app.route('/usuarios', methods=['POST'])
