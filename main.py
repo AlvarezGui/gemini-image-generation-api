@@ -33,6 +33,12 @@ def process_chat():
     insert_chat(data['subject'], data['user_id'], image, data['prompt'])
     return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!"})
 
+@app.route('/chat', methods=['DELETE'])
+def chat_delete():
+    data = request.json
+    return delete_chat(data["chat_id"])
+
+
 @app.route('/home', methods=['POST'])
 def home():
     data= request.json
@@ -41,6 +47,15 @@ def home():
     for item in home_list:
         print(item)
     return jsonify({"status": "ok", "mensagem": f"{home_list}"})
+
+@app.route('/history', methods=['POST'])
+def history():
+    data= request.json
+    history_cursor = get_history(data['user_id'])
+    history_list = list(history_cursor)
+    for item in history_list:
+        print(item)
+    return jsonify({"status": "ok", "mensagem": f"{history_list}"})
 
 # CRUD de usuário
 @app.route('/usuarios', methods=['POST'])
