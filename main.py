@@ -5,6 +5,8 @@ from database.connection import *
 from UserService.user_repository import (
     User, create_user, get_user_by_email, get_all_users, update_user, delete_user
 )
+from bson import ObjectId
+import json
 from AuthService.AuthController import auth_bp
 from functions.generate_image import generate_image
 
@@ -14,6 +16,12 @@ auth = HTTPBasicAuth()
 users = {
     "admin": generate_password_hash("123456"),
 }
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 # função que verifica usuário e senha
 @auth.verify_password
@@ -31,7 +39,7 @@ def process_chat():
     data = request.json
     image = generate_image(data['prompt'])
     insert_chat(data['subject'], data['user_id'], image, data['prompt'])
-    return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!"})
+    return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!", "image_base64": image})
 
 @app.route('/chat', methods=['DELETE'])
 def chat_delete():
@@ -41,12 +49,15 @@ def chat_delete():
 
 @app.route('/home', methods=['POST'])
 def home():
-    data= request.json
+    data = request.json
     home_cursor = get_home(data['user_id'])
     home_list = list(home_cursor)
     for item in home_list:
-        print(item)
-    return jsonify({"status": "ok", "mensagem": f"{home_list}"})
+        if '_id' in item:
+            item['_id'] = str(item['_id'])
+
+    # Agora sim, retorne a lista limpa
+    return jsonify({"status": "ok", "mensagem": home_list})
 
 @app.route('/history', methods=['POST'])
 def history():

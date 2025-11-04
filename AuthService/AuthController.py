@@ -26,5 +26,5 @@ def login():
     user = get_user_by_email(email)
     if not user or not User.check_password(user.get('senha_hash'), senha):
         return jsonify({'erro': 'Credenciais inválidas'}), 401
-    return jsonify({'mensagem': 'Login realizado com sucesso', 'usuario': {'nome': user.get('nome'), 'email': user.get('email')}})
+    return jsonify({'mensagem': 'Login realizado com sucesso', 'usuario': {'nome': user.get('nome'), 'email': user.get('email'), 'user_id': str(user.get('_id'))}})
 
