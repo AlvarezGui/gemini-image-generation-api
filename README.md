@@ -1,2 +1,3 @@
 - Windows: setup.bat
 - Mac/Linux: setup.sh
+- http://127.0.0.1:5000

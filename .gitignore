@@ -2,3 +2,5 @@
 .venv
 prompt.json
 /__pycache__
+*.pyc
+imagem_teste.jpeg
