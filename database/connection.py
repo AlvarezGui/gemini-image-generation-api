@@ -6,6 +6,8 @@ from pymongo import MongoClient, DESCENDING
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
+from datetime import datetime
+
 
 load_dotenv()
 
@@ -17,7 +19,7 @@ images = db["images"]
 prompts = db["prompts"]
 
 def insert_chat(subject, user_id, image, prompt):
-    chat = {"subject": subject, "user_id": user_id, "image": image, "prompt": prompt}
+    chat = {"subject": subject, "user_id": user_id, "image": image, "prompt": prompt, "date": datetime.now()}
     chats.insert_one(chat)
 
 def delete_chat(chat_id):
