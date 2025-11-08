@@ -55,8 +55,6 @@ def home():
     for item in home_list:
         if '_id' in item:
             item['_id'] = str(item['_id'])
-
-    # Agora sim, retorne a lista limpa
     return jsonify({"status": "ok", "mensagem": home_list})
 
 @app.route('/history', methods=['POST'])
@@ -65,8 +63,9 @@ def history():
     history_cursor = get_history(data['user_id'])
     history_list = list(history_cursor)
     for item in history_list:
-        print(item)
-    return jsonify({"status": "ok", "mensagem": f"{history_list}"})
+        if '_id' in item:
+            item['_id'] = str(item['_id'])
+    return jsonify({"status": "ok", "mensagem": history_list})
 
 # CRUD de usuário
 @app.route('/usuarios', methods=['POST'])
