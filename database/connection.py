@@ -29,10 +29,10 @@ def delete_chat(chat_id):
     else: return jsonify({"status": "erro", "mensagem": "Chat não encontrado"})
 
 def get_home(user_id):
-    return chats.find({"user_id": user_id}).sort("_id", DESCENDING).limit(10)
+    return chats.find({"user_id": user_id}).sort("date", DESCENDING).limit(10)
 
 def get_history(user_id):
-    return chats.find({"user_id": user_id}).sort("_id", DESCENDING)
+    return chats.find({"user_id": user_id}).sort("date", DESCENDING)
 
 # testar
 try:
