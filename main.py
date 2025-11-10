@@ -11,6 +11,7 @@ from AuthService.AuthController import auth_bp
 from functions.generate_image import generate_image
 
 
+
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 users = {
@@ -38,8 +39,13 @@ def verify_password(username, password):
 def process_chat():
     data = request.json
     image = generate_image(data['prompt'])
-    insert_chat(data['subject'], data['user_id'], image, data['prompt'])
-    return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!", "image_base64": image})
+    if image == None:
+        print("Erro em gerar a imagem")
+        return jsonify({"status": "err", "mensagem": "Erro"})
+    else:
+        insert_chat(data['subject'], data['user_id'], image, data['prompt'])
+        os.remove("./temp_image.png")
+        return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!", "image_base64": image})
 
 @app.route('/chat', methods=['DELETE'])
 def chat_delete():

@@ -1,4 +1,5 @@
 import base64
+import os
 
 def convert_to_base64(image):
     with open(image, 'rb') as image_file:
