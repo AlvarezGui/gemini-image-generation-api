@@ -11,7 +11,6 @@ from AuthService.AuthController import auth_bp
 from functions.generate_image import generate_image
 
 
-
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 users = {
