@@ -37,20 +37,33 @@ def verify_password(username, password):
 
 @app.route('/chat', methods=['POST'])
 def process_chat():
-    data = request.json
-    image = generate_image(data['prompt'])
-    if image == None:
-        print("Erro em gerar a imagem")
-        return jsonify({"status": "err", "mensagem": "Erro"})
-    else:
-        insert_chat(data['subject'], data['user_id'], image, data['prompt'])
-        os.remove("./temp_image.png")
-        return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!", "image_base64": image})
+    try:
+        data = request.json
+
+        required_fields = ['subject', 'user_id', 'prompt']
+        if not all(field in data for field in required_fields):
+            return jsonify({"status": "error", "mensagem": "Campos obrigatórios não preenchidos"}), 400
+
+        image = generate_image(data['prompt'])
+        if image == None:
+            print("Erro em gerar a imagem")
+            return jsonify({"status": "error", "mensagem": "Erro em gerar imagem"}), 500
+        else:
+            insert_chat(data['subject'], data['user_id'], image, data['prompt'])
+            return jsonify({"status": "ok", "mensagem": f"Chat salvo com sucesso!", "image_base64": image}), 200
+    except Exception as err:
+        print(f"Erro interno : {err}")
+        return jsonify({"status": "error", "mensagem": "Erro interno"}), 500
 
 @app.route('/chat', methods=['DELETE'])
 def chat_delete():
-    data = request.json
-    return delete_chat(data["chat_id"])
+        try:
+            data = request.json
+            delete_chat(data["chat_id"])
+            return jsonify({"status": "ok", "mensagem": "Chat deletado com sucesso!"}), 200
+        except Exception as err:
+            print(f"Erro ao apagar chat: {err}")
+            return jsonify({"status": "error", "mensagem": "Erro interno"}), 500
 
 
 @app.route('/home', methods=['POST'])
