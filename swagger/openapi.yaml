@@ -1,0 +1,172 @@
+openapi: 3.0.3
+info:
+  title: POLIG image generation API
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+
+tags:
+  - name: chat
+    description: Endpoints related to image generation and chat management
+  - name: usuarios
+    description: Endpoints related to user management
+
+paths:
+  /chat:
+    post:
+      tags: [chat]
+      summary: Generate image and save chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [subject, user_id, prompt]
+              properties:
+                subject:
+                  type: string
+                user_id:
+                  type: string
+                prompt:
+                  type: string
+      responses:
+        '200':
+          description: Chat saved successfully
+        '400':
+          description: Missing fields
+        '500':
+          description: Internal error
+    delete:
+      tags: [chat]
+      summary: Delete a chat
+      parameters:
+        - in: query
+          name: chat_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Chat deleted successfully
+        '500':
+          description: Internal error
+
+  /home:
+    get:
+      tags: [chat]
+      summary: Get home data
+      responses:
+        '200':
+          description: Home data
+        '400':
+          description: Missing user_id in request body
+        '500':
+          description: Internal error
+
+  /history:
+    get:
+      tags: [chat]
+      summary: Get user history
+      responses:
+        '200':
+          description: History data
+        '400':
+          description: Missing user_id in request body
+        '500':
+          description: Internal error
+
+  /usuarios:
+    post:
+      tags: [usuarios]
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nome, email, senha]
+              properties:
+                nome:
+                  type: string
+                email:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Email already exists
+        '500':
+          description: Internal error
+    get:
+      tags: [usuarios]
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+        '500':
+          description: Internal error
+
+  /usuarios/{email}:
+    get:
+      tags: [usuarios]
+      summary: Get user by email
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: User found
+        '404':
+          description: User not found
+        '500':
+          description: Internal error
+    put:
+      tags: [usuarios]
+      summary: Update user
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        '200':
+          description: User updated
+        '404':
+          description: User not found
+        '500':
+          description: Internal error
+    delete:
+      tags: [usuarios]
+      summary: Delete user
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: User deleted
+        '404':
+          description: User not found
+        '500':
+          description: Internal error
