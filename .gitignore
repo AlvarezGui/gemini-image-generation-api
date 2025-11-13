@@ -1,6 +1,27 @@
+# Byte-compiled / cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual envs
+venv/
+env/
+.venv/
+
+# Environment variables
 .env
-.venv
-prompt.json
-/__pycache__
-*.pyc
+.env.*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
 imagem_teste.jpeg
