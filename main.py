@@ -9,6 +9,7 @@ from bson import ObjectId
 import json
 from AuthService.AuthController import auth_bp
 from functions.generate_image import generate_image
+from swagger.swagger_blueprint import swagger_bp
 
 
 app = Flask(__name__)
@@ -169,6 +170,7 @@ def api_delete_user(email):
         return jsonify({"erro": "Erro interno ao deletar usuário"}), 500
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(swagger_bp)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5000, debug=True)
