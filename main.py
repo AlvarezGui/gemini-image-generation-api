@@ -66,7 +66,7 @@ def chat_delete():
             return jsonify({"status": "error", "mensagem": "Erro interno"}), 500
 
 
-@app.route('/home', methods=['GET'])
+@app.route('/home', methods=['POST'])
 def home():
     try:
         data = request.json
@@ -83,7 +83,7 @@ def home():
         print(f"Erro ao buscar home: {err}")
         return jsonify({"status": "error", "mensagem": "Erro interno"}), 500
 
-@app.route('/history', methods=['GET'])
+@app.route('/history', methods=['POST'])
 def history():
     try:
         if request.json is None or 'user_id' not in request.json:
@@ -173,4 +173,5 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(swagger_bp)
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
