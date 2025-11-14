@@ -50,7 +50,7 @@ def process_chat():
         if not all(field in data for field in required_fields):
             return jsonify({"status": "error", "mensagem": "Campos obrigatórios não preenchidos"}), 400
 
-        image = generate_image(data['prompt'])
+        image = generate_image(data['prompt'], data['subject'])
         if image == None:
             print("Erro em gerar a imagem")
             return jsonify({"status": "error", "mensagem": "Erro em gerar imagem"}), 500

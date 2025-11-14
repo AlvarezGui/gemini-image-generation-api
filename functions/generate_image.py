@@ -6,11 +6,11 @@ import os
 client = genai.Client()
 image_path = "./temp_image.png"
 
-def generate_image(prompt):
+def generate_image(prompt, subject):
     try:
         response = client.models.generate_images(
                 model='imagen-4.0-generate-001',
-                prompt=prompt,
+                prompt=f"levando em conta que será uma imagem feita para a matéria escolar {subject}, sigas as intruções a seguir: {prompt}",
                 config=types.GenerateImagesConfig(
                     number_of_images= 1,
                 )
