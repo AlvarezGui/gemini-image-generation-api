@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.connection import *
@@ -10,9 +10,13 @@ import json
 from AuthService.AuthController import auth_bp
 from functions.generate_image import generate_image
 from swagger.swagger_blueprint import swagger_bp
+from flask_cors import CORS
+
+SECRET_KEY = os.environ.get('API_SECRET_KEY')
 
 
 app = Flask(__name__)
+CORS(app)
 auth = HTTPBasicAuth()
 users = {
     "admin": generate_password_hash("123456"),
@@ -24,16 +28,18 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-# função que verifica usuário e senha
-@auth.verify_password
-def verify_password(username, password):
-    if username in users and check_password_hash(users.get(username), password):
-        return username
-    # Tenta autenticar pelo MongoDB
-    user = get_user_by_email(username)
-    if user and check_password_hash(user.get("senha_hash"), password):
-        return username
-    return None
+@app.before_request
+def check_api_key():
+    if request.path.startswith('/swagger'):
+        return
+    
+    if request.method == 'OPTIONS':
+        return
+
+    auth_header = request.headers.get('Authorization')
+
+    if not auth_header or auth_header != f'Bearer {SECRET_KEY}':
+        abort(403) # Proibido (Forbidden)
 
 @app.route('/chat', methods=['POST'])
 def process_chat():

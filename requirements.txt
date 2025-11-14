@@ -5,3 +5,4 @@ requests
 Flask
 Flask-HTTPAuth
 pymongo
+flask-cors
