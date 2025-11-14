@@ -1,3 +1,6 @@
+## Build:
 - Windows: setup.bat
 - Mac/Linux: setup.sh
-- http://127.0.0.1:5000
+
+## Routes:
+https://polig-947071723613.southamerica-east1.run.app/swagger/
